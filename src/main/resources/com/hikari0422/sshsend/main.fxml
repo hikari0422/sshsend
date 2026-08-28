@@ -3,14 +3,26 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.VBox?>
-
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.Button?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.hikari0422.sshsend.Controller">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-    </padding>
+<?import javafx.scene.layout.GridPane?>
+<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.hikari0422.sshsend.Controller">
 
-    <Label fx:id="welcomeText"/>
-    <Button text="Hello!" onAction="#onHelloButtonClick"/>
+    <GridPane hgap="15" vgap="15">
+        <Label text="Host" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <TextField fx:id="host" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+        <Label text="User Name" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <TextField fx:id="username" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+        <Label text="Password" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <PasswordField fx:id="passwd" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+        <Label text="Port(Default 22)" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+        <TextField fx:id="port" promptText="22" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+    </GridPane>
+
+    <Button text="Connect"/>
 </VBox>
