@@ -3,6 +3,7 @@ package com.hikari0422.sshsend.ssh;
 
 import net.schmizz.sshj.SSHClient;
 
+import java.io.File;
 import java.io.IOException;
 
 public class SSHConnect implements AutoCloseable {
@@ -13,7 +14,8 @@ public class SSHConnect implements AutoCloseable {
         close();
         SSHClient client = new SSHClient();
         try {
-            client.loadKnownHosts();
+            File knownHosts = new File(new File(System.getProperty("user.home"), ".ssh"), "known_hosts");
+            client.addHostKeyVerifier(new TrustOnFirstUseKnownHosts(knownHosts));
             client.connect(host, port);
             client.authPassword(username, passwd);
             ssh = client;
