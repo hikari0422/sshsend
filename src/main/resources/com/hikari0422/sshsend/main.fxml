@@ -1,28 +1,109 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.GridPane?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.hikari0422.sshsend.Controller">
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-    <GridPane hgap="15" vgap="15">
-        <Label text="Host" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-        <TextField fx:id="host" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+<StackPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.hikari0422.sshsend.Controller">
+    <children>
+        <VBox fx:id="loginPage" alignment="CENTER" spacing="16" maxWidth="520">
+            <padding><Insets top="32" right="40" bottom="32" left="40"/></padding>
+            <Label text="SSHSend" style="-fx-font-size: 28px; -fx-font-weight: bold;"/>
+            <Label text="Connect to a remote device" style="-fx-font-size: 15px;"/>
+            <Separator/>
+            <GridPane hgap="10" vgap="12" maxWidth="480">
+                <columnConstraints><ColumnConstraints minWidth="100"/><ColumnConstraints hgrow="ALWAYS"/><ColumnConstraints/></columnConstraints>
+                <Label text="Saved device" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <ComboBox fx:id="savedConnections" promptText="Choose a saved device" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                <Button fx:id="deleteConnectionButton" text="Delete" disable="true" onAction="#deleteConnection" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                <Label text="Host" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                <TextField fx:id="host" promptText="192.168.1.10" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.columnSpan="2"/>
+                <Label text="User name" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                <TextField fx:id="username" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.columnSpan="2"/>
+                <Label text="Password" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                <PasswordField fx:id="passwd" onAction="#initConnect" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.columnSpan="2"/>
+                <Label text="Port" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                <TextField fx:id="port" promptText="22" GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.columnSpan="2"/>
+            </GridPane>
+            <HBox alignment="CENTER_RIGHT" spacing="10" maxWidth="480">
+                <Button text="Save device" onAction="#saveConnection"/>
+                <Button fx:id="connectButton" text="Connect" defaultButton="true" onAction="#initConnect"/>
+            </HBox>
+            <Label fx:id="loginStatusLabel" text="Not connected" wrapText="true"/>
+        </VBox>
 
-        <Label text="User Name" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-        <TextField fx:id="username" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-
-        <Label text="Password" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-        <PasswordField fx:id="passwd" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-
-        <Label text="Port(Default 22)" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-        <TextField fx:id="port" promptText="22" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
-    </GridPane>
-
-    <Button text="Connect"/>
-</VBox>
+        <BorderPane fx:id="browserPage">
+            <top>
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <padding><Insets top="12" right="14" bottom="10" left="14"/></padding>
+                    <Pane HBox.hgrow="ALWAYS"/>
+                    <Label text="Connected" style="-fx-text-fill: #26843b;"/>
+                    <Button text="Disconnect" onAction="#disconnect"/>
+                </HBox>
+            </top>
+            <center>
+                <TabPane tabClosingPolicy="UNAVAILABLE">
+                    <tabs>
+                        <Tab text="Remote files">
+                            <VBox spacing="8">
+                                <padding><Insets top="8" right="14" bottom="8" left="14"/></padding>
+                                <HBox spacing="8">
+                                    <Button text="Up" onAction="#parentDirectory"/>
+                                    <TextField fx:id="browserPath" promptText="Remote directory" onAction="#browseRemote" HBox.hgrow="ALWAYS"/>
+                                    <Button fx:id="refreshButton" text="Open / Refresh" disable="true" onAction="#refreshRemote"/>
+                                </HBox>
+                                <SplitPane orientation="VERTICAL" VBox.vgrow="ALWAYS">
+                                    <SplitPane dividerPositions="0.64">
+                                        <TableView fx:id="remoteTable">
+                                            <columns>
+                                                <TableColumn fx:id="nameColumn" text="Name" prefWidth="230"/>
+                                                <TableColumn fx:id="typeColumn" text="Type" prefWidth="70"/>
+                                                <TableColumn fx:id="sizeColumn" text="Size" prefWidth="80"/>
+                                                <TableColumn fx:id="modifiedColumn" text="Modified" prefWidth="145"/>
+                                            </columns>
+                                            <placeholder><Label text="No remote files"/></placeholder>
+                                        </TableView>
+                                        <VBox spacing="7" minWidth="240">
+                                            <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+                                            <Label fx:id="previewTitle" text="Preview" style="-fx-font-size: 15px; -fx-font-weight: bold;" wrapText="true"/>
+                                            <Label fx:id="previewDetails" wrapText="true"/>
+                                            <Separator/>
+                                            <TextArea fx:id="previewContent" text="Select a file to preview its contents" editable="false" wrapText="false" VBox.vgrow="ALWAYS"/>
+                                        </VBox>
+                                    </SplitPane>
+                                    <VBox spacing="6">
+                                        <Label text="Download selection"/>
+                                        <ListView fx:id="downloadList" VBox.vgrow="ALWAYS"/>
+                                        <HBox spacing="8">
+                                            <Button fx:id="addButton" text="Add selected files" disable="true" onAction="#addSelected"/>
+                                            <Button text="Remove" onAction="#removeSelected"/>
+                                            <Button text="Clear" onAction="#clearSelection"/>
+                                            <Pane HBox.hgrow="ALWAYS"/>
+                                            <Button fx:id="downloadButton" text="Download all..." disable="true" onAction="#downloadSelected"/>
+                                        </HBox>
+                                    </VBox>
+                                </SplitPane>
+                            </VBox>
+                        </Tab>
+                        <Tab text="Upload">
+                            <GridPane hgap="10" vgap="12">
+                                <padding><Insets top="18" right="18" bottom="18" left="18"/></padding>
+                                <columnConstraints><ColumnConstraints minWidth="90"/><ColumnConstraints hgrow="ALWAYS"/><ColumnConstraints/></columnConstraints>
+                                <Label text="Local file" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                                <TextField fx:id="localFile" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                                <Button text="Browse..." onAction="#chooseFile" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                                <Label text="Remote path" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                                <TextField fx:id="remotePath" promptText="/remote/path/file.txt" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                                <Button fx:id="uploadButton" text="Upload" disable="true" onAction="#upload" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                            </GridPane>
+                        </Tab>
+                    </tabs>
+                </TabPane>
+            </center>
+            <bottom>
+                <Label fx:id="statusLabel" text="Connected" BorderPane.alignment="CENTER_LEFT">
+                    <padding><Insets top="8" right="14" bottom="10" left="14"/></padding>
+                </Label>
+            </bottom>
+        </BorderPane>
+    </children>
+</StackPane>

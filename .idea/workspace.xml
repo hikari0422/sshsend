@@ -5,8 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1d6fee9a-afb5-41c3-a117-9321e818c87d" name="Changes" comment="init repo">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hikari0422/sshsend/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hikari0422/sshsend/Controller.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/hikari0422/sshsend/ssh/SSHConnect.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hikari0422/sshsend/ssh/SSHConnect.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/com/hikari0422/sshsend/main.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/hikari0422/sshsend/main.fxml" afterDir="false" />
     </list>
@@ -41,7 +41,7 @@
     </option>
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="DEPENDENCY_CHECKER_PROBLEMS_TAB" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5,
@@ -122,6 +122,14 @@
         <item itemvalue="Application.App" />
       </list>
     </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-34e2839f716b-intellij.indexing.shared.core-IU-262.9437.185" />
+        <option value="bundled-js-predefined-d6986cc7102b-4abd2a77f808-JavaScript-IU-262.9437.185" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
